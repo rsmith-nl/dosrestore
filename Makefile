@@ -4,7 +4,7 @@
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
 # Created: 2006-08-12 20:54:23 +0200
-# Last modified: 2017-12-28 15:28:25 +0100
+# Last modified: 2017-12-28 15:32:41 +0100
 
 # If make complains about a missing file, run 'make depend' first
 
@@ -30,23 +30,12 @@ BASENAME = dosrestore
 VMAJOR   = 1
 VMINOR   = 1
 
-# Standard files that need to be included in the distribution
-DISTFILES = README INSTALL COPYING Makefile $(BASENAME).1
-
 # Source files.
 SRCS = dosrestore.c
-
-# Extra stuff to add into the distribution.
-XTRA_DIST= 
 
 ##### No editing necessary beyond this point
 # Object files.
 OBJS = $(SRCS:.c=.o)
-
-# Predefined directory/file names
-PKGDIR  = $(BASENAME)-$(VMAJOR).$(VMINOR)
-TARFILE = $(BASENAME)-$(VMAJOR).$(VMINOR).tar.gz
-BACKUP  = $(BASENAME)-backup-$(VMAJOR).$(VMINOR).tar.gz
 
 # Version number
 VERSION = -DVERSION=\"$(VMAJOR).$(VMINOR)\"
@@ -65,9 +54,7 @@ $(BASENAME): $(OBJS)
 
 # Remove all generated files.
 clean:;
-	rm -f $(OBJS) $(BASENAME) *~ core gmon.out \
-	$(TARFILE) $(BACKUP) $(LOG) \
-	$(TARFILE).md5 $(TARFILE).asc
+	rm -f $(OBJS) $(BASENAME) *~ core gmon.out
 
 # Install the program and manual page. You should be root to do this.
 install: $(BASENAME)
