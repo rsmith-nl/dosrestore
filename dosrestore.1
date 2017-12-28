@@ -1,0 +1,50 @@
+.\" file: dosrestore.1
+.\" vim:fileencoding=utf-8:fdm=marker:ft=nroff
+.\"
+.\" Author: R.F. Smith <rsmith@xs4all.nl>
+.\" Created: 2003-06-22 12:18:31 +0200
+.\" Last modified: 2017-12-28 15:17:40 +0100
+
+.TH dosrestore 1 "2017/12/28" "R. Smith" "User Commands"
+
+.SH NAME
+dosrestore \- a program to restore old DOS backups.
+
+.SH SYNOPSIS
+.B dosrestore
+/path/to/backup 
+
+.SH DESCRIPTION 
+This manual page documents version 1.0.0 of the dosrestore program. This
+program extracts the contents from backups made by the old DOS "backup"
+program. It writes the restored files and directories to the current
+working directory.
+
+It starts looking for backups, in the form of a couple of files named
+"backup.001" and "restore.001" in the directory given on the command
+line. Those names can be upper or lower case. If these files have been
+processed, and the contents of the control file indicate there are more
+files, the program asks for the next files.
+
+.SH OPTIONS
+This programs has no options.
+
+.SH BUGS
+This program has only been tested on a couple of backups, made with DOS 5
+or thereabouts.
+
+It parses only the information which it needs from the backup files,
+i.e. file names and sizes. The backup control file contains extra info,
+probably file dates and times, but those are not parsed in this version.
+
+.SH AUTHOR
+dosrestore was written and is maintained by 
+\fBRoland Smith <rsmith@xs4all.nl>\fP.
+
+The latest version of this program is available at: 
+\fBhttp://www.xs4all.nl/~rsmith/software/\fP
+
+.SH LICENSE
+To the extent possible under law, Roland Smith has waived all copyright and
+related or neighboring rights to dosrestore. This work is published from the
+Netherlands. See http://creativecommons.org/publicdomain/zero/1.0/

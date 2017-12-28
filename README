@@ -1,0 +1,37 @@
+INTRODUCTION
+------------
+This is the readme file for version 1.0.1 of the 'dosrestore' program,
+released on 2017-12-28.
+
+This program extracts the contents of backups made with the old DOS backup
+program.
+
+I wrote it to save some files from a cuple of old backups I had laying
+around. It has been tested to work correctly on those backups, which have
+been made with DOS 5 or thereabouts. 
+
+It parses only the information which it needs from the backup files,
+i.e. file names and sizes. The backup control file contains extra info,
+probably file dates and times, but those are not parsed in this version.
+
+LICENSE
+-------
+To the extent possible under law, Roland Smith has waived all copyright and
+related or neighboring rights to dosrestore. This work is published from the
+Netherlands. See http://creativecommons.org/publicdomain/zero/1.0/
+
+See the file LICENSE.txt.
+
+BUILDING THE PROGRAM
+--------------------
+See the file INSTALL.
+
+FEEDBACK
+--------
+This program was written by Roland Smith.
+
+If you have caught a bug, or if you have thought of a feature that you
+think should be added, by all means report it or (even better :-) send a
+patch.
+
+You can reach me as: rsmith@xs4all.nl
