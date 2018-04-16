@@ -1,34 +1,13 @@
 /* file: dosrestore.c
  * vim:fileencoding=utf-8:fdm=marker:ft=c
  *
- * Author: R.F. Smith <rsmith@xs4all.nl>
- * Created: 2003-06-22 12:18:31 +0200
- * Last modified: 2017-12-28 15:25:04 +0100
- *
  * This file is part of dosrestore, a program to unpack old DOS backups.
- *
  * Use 'indent -kr -i8' to indent this code properly.
  *
- * To the extent possible under law, Roland Smith has waived all copyright and
- * related or neighboring rights to dosrestore. This work is published from the
- * Netherlands. See http://creativecommons.org/publicdomain/zero/1.0/
- *
- * $Log: dosrestore.c,v $
- * Revision 1.4  2003/06/22 10:17:11  rsmith
- * Release 1.0.0.
- *
- * Revision 1.3  2003/06/21 19:57:32  rsmith
- * Convert backslashes in directory names to forward slashes. (bugfix)
- * The names of backup and control files can be upper or lower case. (bugfix)
- * Refactored the code into more functions. Removed a lot of aborts in favor
- * of returning values.
- *
- * Revision 1.2  2003/06/19 21:18:20  rsmith
- * First (rough) working version. :-)
- *
- * Revision 1.1  2003/06/19 20:22:54  rsmith
- * Initial revision
- *
+ * Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>.
+ * SPDX-License-Identifier: MIT
+ * Created: 2003-06-22T12:18:31+0200
+ * Last modified: 2018-04-16T23:55:00+0200
  */
 
 /* If you don't want debugging or assertions, #define NDEBUG */
