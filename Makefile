@@ -1,42 +1,34 @@
-# file: Makefile
-# vim:fileencoding=utf-8:fdm=marker:ft=make
-# This is the Makefile for dosrestore. A program to restore old DOS backups.
-#
-# Author: R.F. Smith <rsmith@xs4all.nl>
-# Created: 2006-08-12 20:54:23 +0200
-# Last modified: 2017-12-28 15:32:41 +0100
-
-# If make complains about a missing file, run 'make depend' first
-
-# Choose an appropriate CFLAGS and LFLAGS
-
-# The next two lines are for building an executable suitable for debugging.
-#CFLAGS = -pipe -Wall -g -O0
-#LFLAGS = -pipe
-
-# Other libraries to link against
-LIBS +=
-
-# Location where to install the binary.
-BINDIR = /usr/local/bin
-
-# Location where to install the manual-page.
-MANDIR = /usr/local/man/man1
-
-##### Maintainer stuff goes here:
-
-# Package name and version: BASENAME-VMAJOR.VMINOR.tar.gz
-BASENAME = dosrestore
+# Package name and version: BASENAME-VMAJOR.VMINOR.VPATCH.tar.gz
+BASENAME = dosrestore  ## Name for the project
 VMAJOR   = 1
 VMINOR   = 1
+VPATCH   = 0
 
+# Define the C compiler to be used, if not cc.
+#CC = gcc
+
+# Add appropriate CFLAGS and LFLAGS
+CFLAGS = -Os ## Compiler flags for C
+CFLAGS += -std=c11 -march=native -pipe -ffast-math
+CFLAGS += -Wall -Wshadow -Wpointer-arith -Wstrict-prototypes
+LFLAGS = -s -flto ## Linker flags
+# For a static executable, add the following LFLAGS.
+#LFLAGS += --static
+
+# Other libraries to link against
+#LIBS += -lm
+
+PREFIX = ${HOME}/.local  ## Root for the installation dicrectory tree.
+BINDIR = $(PREFIX)/bin  ## Location where the binary will be installed.
+MANDIR = $(PREFIX)/man/man1 ## Location for the manual-page.
+DOCSDIR= $(PREFIX)/share/doc/$(BASENAME)  ## Location for the documentation
+
+##### Maintainer stuff goes here:
+DISTFILES = Makefile  ## Files that need to be included in the distribution.
 # Source files.
-SRCS = dosrestore.c
+SRC = dosrestore.c  ## source code file.
 
 ##### No editing necessary beyond this point
-# Object files.
-OBJS = $(SRCS:.c=.o)
-
 # Version number
 VERSION = -DVERSION=\"$(VMAJOR).$(VMINOR)\"
 # Program name
@@ -44,34 +36,58 @@ PACKAGE = -DPACKAGE=\"$(BASENAME)\"
 # Add to CFLAGS
 CFLAGS += $(VERSION) $(PACKAGE)
 
-.PHONY: clean install uninstall dist backup all
+all: $(BASENAME)  ## Compile the program. (default)
 
-all: $(BASENAME)
+$(BASENAME): $(SRC)
+	$(CC) $(CFLAGS) $(LFLAGS) $(LDIRS) -o $(BASENAME) $(SRC) $(LIBS)
 
-# builds a binary.
-$(BASENAME): $(OBJS)
-	$(CC) $(LFLAGS) $(LDIRS) -o $(BASENAME) $(OBJS) $(LIBS)
+.PHONY: clean
+clean:  ## Remove all generated files.
+	rm -f $(BASENAME) *~ core gmon.out $(TARFILE)* version.h backup-*
 
-# Remove all generated files.
-clean:;
-	rm -f $(OBJS) $(BASENAME) *~ core gmon.out
-
-# Install the program and manual page. You should be root to do this.
-install: $(BASENAME)
-	@if [ `id -u` != 0 ]; then \
-		echo "You must be root to install the program!"; \
-		exit 1; \
-	fi
+.PHONY: install
+install: $(BASENAME)  ## Install the program.
+	install -d $(BINDIR)
 	install -m 755 $(BASENAME) $(BINDIR)
-	if [ -e $(BASENAME).1 ]; then \
-		install -m 644 $(BASENAME).1 $(MANDIR); \
-		gzip -f $(MANDIR)/$(BASENAME).1; \
-	fi
+	install -m 644 $(BASENAME).1 $(MANDIR)
+	gzip -f -q $(MANDIR)/$(BASENAME).1
 
-uninstall:;
-	@if [ `id -u` != 0 ]; then \
-		echo "You must be root to uninstall the program!"; \
-		exit 1; \
-	fi
+.PHONY: uninstall
+uninstall:  ## Uninstall the program.
 	rm -f $(BINDIR)/$(BASENAME)
-	rm -f $(MANDIR)/$(BASENAME).1*
+
+version.h:
+	echo '#define VERSION "'${VMAJOR}"."${VMINOR}"."${VPATCH}'"' >version.h
+
+.PHONY: style
+style:  ## Reformat source code using astyle.
+	astyle -n *.c *.h
+
+.PHONY: tidy
+tidy:  ## Run static code checker clang-tidy.
+	clang-tidy19 --use-color --quiet *.c *.h --
+
+.PHONY: man
+man:  ## Show the rendered manual page
+	mandoc -Tutf8 $(BASENAME).1 | less
+
+.PHONY: help
+help:  ## List available commands
+	@echo "make variables:"
+	@echo
+	@sed -n -e '/##/s/=.*\#\#/\t/p' Makefile
+	@echo
+	@echo "make targets:"
+	@echo
+	@sed -n -e '/##/s/:.*\#\#/\t/p' Makefile
+
+# Predefined directory/file names
+PKGDIR  = $(BASENAME)-$(VMAJOR).$(VMINOR).$(VPATCH)  ## Directory name in the package.
+TARFILE = $(PKGDIR).tar.gz  ## Filename for the package.
+
+dist: clean  # Build a tar distribution file
+	rm -rf $(PKGDIR)
+	mkdir -p $(PKGDIR)
+	cp $(DISTFILES) $(XTRA_DIST) *.c *.h $(PKGDIR)
+	tar -czf $(TARFILE) $(PKGDIR)
+	rm -rf $(PKGDIR)

@@ -7,7 +7,7 @@
  * Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>.
  * SPDX-License-Identifier: MIT
  * Created: 2003-06-22T12:18:31+0200
- * Last modified: 2018-04-16T23:55:00+0200
+ * Last modified: 2025-04-21T16:10:54+0200
  */
 
 /* If you don't want debugging or assertions, #define NDEBUG */
@@ -135,11 +135,11 @@ int main(int argc, char *argv[])
 int open_control(char *dir, int num)
 {
     char cname[PATH_MAX];
-    int i, rv;
+    int i;
 
     assert(num > 0);
     for (i=0; i<2; i++) {
-        rv = snprintf(cname, PATH_MAX, "%s/%s.%03d",
+        snprintf(cname, PATH_MAX, "%s/%s.%03d",
                   dir, cfname[i], num);
         control = fopen(cname, "rb");
         if (control)
@@ -154,11 +154,11 @@ int open_control(char *dir, int num)
 int open_backup(char *dir, int num)
 {
     char bname[PATH_MAX];
-    int i, rv;
+    int i;
 
     assert(num > 0);
     for (i=0; i<2; i++) {
-        rv = snprintf(bname, PATH_MAX, "%s/%s.%03d",
+        snprintf(bname, PATH_MAX, "%s/%s.%03d",
                   dir, bfname[i], num);
         backup = fopen(bname, "rb");
         if (backup)
