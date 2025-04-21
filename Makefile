@@ -29,16 +29,9 @@ DISTFILES = Makefile  ## Files that need to be included in the distribution.
 SRC = dosrestore.c  ## source code file.
 
 ##### No editing necessary beyond this point
-# Version number
-VERSION = -DVERSION=\"$(VMAJOR).$(VMINOR)\"
-# Program name
-PACKAGE = -DPACKAGE=\"$(BASENAME)\"
-# Add to CFLAGS
-CFLAGS += $(VERSION) $(PACKAGE)
-
 all: $(BASENAME)  ## Compile the program. (default)
 
-$(BASENAME): $(SRC)
+$(BASENAME): $(SRC) version.h
 	$(CC) $(CFLAGS) $(LFLAGS) $(LDIRS) -o $(BASENAME) $(SRC) $(LIBS)
 
 .PHONY: clean
@@ -57,15 +50,12 @@ uninstall:  ## Uninstall the program.
 	rm -f $(BINDIR)/$(BASENAME)
 
 version.h:
-	echo '#define VERSION "'${VMAJOR}"."${VMINOR}"."${VPATCH}'"' >version.h
+	echo '#define PACKAGE "'${BASENAME}'"' >version.h
+	echo '#define VERSION "'${VMAJOR}"."${VMINOR}'"' >>version.h
 
 .PHONY: style
 style:  ## Reformat source code using astyle.
-	astyle -n *.c *.h
-
-.PHONY: tidy
-tidy:  ## Run static code checker clang-tidy.
-	clang-tidy19 --use-color --quiet *.c *.h --
+	astyle -n *.c
 
 .PHONY: man
 man:  ## Show the rendered manual page

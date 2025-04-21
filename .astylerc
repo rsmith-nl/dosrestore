@@ -1,0 +1,12 @@
+# file: ~/.astylerc
+# vim:fileencoding=utf-8
+#
+# Author: R.F. Smith <rsmith@xs4all.nl>
+# Created: 2024-09-07T13:01:49+0200
+# Last modified: 2024-09-07T15:02:01+0200
+
+--style=1tbs
+-s2
+--indent-switches
+--delete-empty-lines
+--add-braces
